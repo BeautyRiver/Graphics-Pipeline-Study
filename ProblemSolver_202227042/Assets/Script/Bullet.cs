@@ -12,9 +12,12 @@ public class Bullet : MonoBehaviour
     }
     private void Update()
     {
-        transform.Translate(Vector3.right * 5.0f * Time.deltaTime);
+        transform.Translate(Vector3.right * 5.0f * Time.deltaTime);                
+    }
 
-        if(transform.position.x > 8)
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Enemy"))
         {
             gameObject.SetActive(false);
             transform.position = initPos;

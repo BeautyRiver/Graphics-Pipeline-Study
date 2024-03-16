@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LinkedQueue : MonoBehaviour
+public class Queue : MonoBehaviour
 {
     public class Node<T>
     {

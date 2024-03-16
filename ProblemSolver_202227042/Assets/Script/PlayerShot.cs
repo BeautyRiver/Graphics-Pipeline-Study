@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PlayerShot : MonoBehaviour
 {
-    private LinkedQueue.LinkQueue<GameObject> queue;
+    private Queue.LinkQueue<GameObject> queue;
     public GameObject bullet;
     private int number = 0;
     private void Awake()
     {        
-        queue = new LinkedQueue.LinkQueue<GameObject>();
+        queue = new Queue.LinkQueue<GameObject>();
         MakeBullets();
     }
 
@@ -31,7 +31,6 @@ public class PlayerShot : MonoBehaviour
             if (queue.IsEmpty())
                 MakeBullets();
         }
-
     }
 
     private void MakeBullets()
