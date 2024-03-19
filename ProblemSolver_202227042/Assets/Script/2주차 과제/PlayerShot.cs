@@ -6,6 +6,8 @@ public class PlayerShot : MonoBehaviour
 {
     private Queue.LinkQueue<GameObject> queue;
     public GameObject bullet;
+    public float fireDelay = 0.5f; // 발사 사이의 딜레이 시간 (초)
+    private float lastFireTime = 0f; // 마지막 발사 시간
     private int number = 0;
     private void Awake()
     {        
@@ -15,7 +17,7 @@ public class PlayerShot : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && Time.time >= lastFireTime + fireDelay)
         {
             GameObject obj = queue.Dequeue();
             if (obj != null)
@@ -30,6 +32,8 @@ public class PlayerShot : MonoBehaviour
 
             if (queue.IsEmpty())
                 MakeBullets();
+
+            lastFireTime = Time.time;
         }
     }
 
