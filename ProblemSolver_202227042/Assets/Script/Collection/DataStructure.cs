@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Queue : MonoBehaviour
+public class DataStructure : MonoBehaviour
 {
     public class Node<T>
     {
@@ -17,7 +17,7 @@ public class Queue : MonoBehaviour
     }
 
     // 제네릭 링크드 리스트 큐
-    public class LinkQueue<T>
+    public class Queue<T>
     {
         // 큐의 맨 앞 노드
         public Node<T> head;
@@ -25,7 +25,7 @@ public class Queue : MonoBehaviour
         public Node<T> tail;
 
         // 생성자
-        public LinkQueue()
+        public Queue()
         {
             head = null;
             tail = null;
@@ -58,7 +58,7 @@ public class Queue : MonoBehaviour
         {
             if (IsEmpty())
             {
-                Debug.Log("Queue가 비어있음");  
+                Debug.Log("Queue가 비어있음");
                 return default(T);
             }
 
@@ -82,4 +82,7 @@ public class Queue : MonoBehaviour
             return head.Data;
         }
     }
+
+   
 }
+

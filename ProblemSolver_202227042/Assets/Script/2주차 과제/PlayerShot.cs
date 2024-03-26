@@ -1,18 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerShot : MonoBehaviour
 {
-    private Queue.LinkQueue<GameObject> queue;
+    private DataStructure.Queue<GameObject> queue;
     public GameObject bullet;
     public float fireDelay = 0.5f; // 발사 사이의 딜레이 시간 (초)
     private float lastFireTime = 0f; // 마지막 발사 시간
     private int number = 0;
+    
     private void Awake()
     {        
-        queue = new Queue.LinkQueue<GameObject>();
-        MakeBullets();
+        queue = new DataStructure.Queue<GameObject>();
+        MakeBullets();        
     }
 
     private void Update()
