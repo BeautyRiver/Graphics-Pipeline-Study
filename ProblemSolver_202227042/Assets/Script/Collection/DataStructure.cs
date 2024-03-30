@@ -52,7 +52,7 @@ public class DataStructure : MonoBehaviour
                 tail = newNode;
             }
         }
-
+        
         // 큐의 맨 앞 데이터 제거, 반환
         public T Dequeue()
         {
@@ -83,6 +83,44 @@ public class DataStructure : MonoBehaviour
         }
     }
 
-   
+    public class Stack<T>
+    {
+        public Queue<T> queue1 = new Queue<T>();
+        public Queue<T> queue2 = new Queue<T>();
+
+        public void Push(T data)
+        {
+            queue2.Enqueue(data);
+
+            // queue1이 비어있지 않다면 queue2에 데이터 전부 옮김 
+            while (!queue1.IsEmpty())
+            {
+                queue2.Enqueue(queue1.Dequeue());
+            }
+            // temp는 항상 비어있게
+            Queue<T> tempQueue = queue1;
+            queue1 = queue2; // 다시 queue1에 데이터 쌓음
+            queue2 = tempQueue; // queue2 초기화
+        }
+
+        // 스택에서 가장 마지막에 추가된 요소를 제거하고 반환 Pop
+        public T Pop()
+        {           
+            return queue1.Dequeue();
+        }
+        public T Peek()
+        {
+            return queue1.Peek();
+        }
+
+        // 스택이 비어 있는지 확인
+        public bool IsEmpty()
+        {
+            return queue1.IsEmpty();
+        }
+
+    }
+
+
 }
 
