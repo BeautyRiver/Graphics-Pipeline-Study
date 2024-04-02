@@ -89,7 +89,7 @@ public class DataStructure : MonoBehaviour
         public Queue<T> queue2 = new Queue<T>();
 
         public void Push(T data)
-        {
+        {            
             queue2.Enqueue(data);
 
             // queue1이 비어있지 않다면 queue2에 데이터 전부 옮김 
@@ -118,7 +118,6 @@ public class DataStructure : MonoBehaviour
         {
             return queue1.IsEmpty();
         }
-
     }
 
 
