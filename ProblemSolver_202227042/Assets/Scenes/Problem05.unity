@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 556168609}
   - component: {fileID: 556168608}
+  - component: {fileID: 556168611}
   m_Layer: 0
   m_Name: GM
   m_TagString: Untagged
@@ -167,6 +168,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &556168611
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556168607}
+  m_Mesh: {fileID: 0}
 --- !u!1 &1631362788
 GameObject:
   m_ObjectHideFlags: 0

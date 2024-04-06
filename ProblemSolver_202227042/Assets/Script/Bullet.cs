@@ -29,7 +29,8 @@ public class Bullet : MonoBehaviour
         {
             isHit = true;
         }
-        if(isHit)
+
+        if (isHit)
         {
             gameObject.SetActive(false);
             transform.position = initPos;
@@ -39,6 +40,7 @@ public class Bullet : MonoBehaviour
             // Queue 일때
             if(player.selectDataStruct == PlayerShot.DataStructure.Queue)
                 player.queue.Enqueue(gameObject);
+
             // Stack 일때
             else if (player.selectDataStruct == PlayerShot.DataStructure.Stack)
                 player.stack.queue1.Enqueue(gameObject); // 어차피 역순으로 queue를 해놓았기 때문에 다시 queue로 쌓고 dequeue하면 똑같음
