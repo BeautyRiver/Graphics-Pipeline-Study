@@ -22,6 +22,7 @@ public class StaticMeshGenEditor : Editor
 
 public class StaticMeshGen : MonoBehaviour
 {
+    public Material material;
     private void Start()
     {
         GenerateMesh();
@@ -49,7 +50,6 @@ public class StaticMeshGen : MonoBehaviour
             new Vector3(2.0f, 0.0f, 1.0f), // 5
         };
 
-        mesh.vertices = vertices;
 
         int[] triangles = new int[]
         {
@@ -68,7 +68,12 @@ public class StaticMeshGen : MonoBehaviour
             2, 3, 5
         };
 
+        mesh.vertices = vertices;
         mesh.triangles = triangles;
+
+        if (material != null)
+            mr.materials = new Material[] { material };
+
         mesh.RecalculateNormals(); // 메시의 노말을 재계산하여 올바른 라이팅을 보장
 
         mf.mesh = mesh;
