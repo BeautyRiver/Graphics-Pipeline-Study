@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEditor;
+using Unity.VisualScripting;
 
 [CustomEditor(typeof(StaticMeshGen))]
 public class StaticMeshGenEditor : Editor
 {
-    // 버튼만들기 예제
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -18,35 +17,60 @@ public class StaticMeshGenEditor : Editor
         {
             script.GenerateMesh();
         }
-
     }
 }
 
-// 메쉬만들기 예제
 public class StaticMeshGen : MonoBehaviour
 {
+    private void Start()
+    {
+        GenerateMesh();
+    }
     public void GenerateMesh()
-    {        
+    {
+        MeshFilter mf = GetComponent<MeshFilter>();
+        MeshRenderer mr = GetComponent<MeshRenderer>();
+
+        if (mf == null) mf = this.AddComponent<MeshFilter>();
+        if (mr == null) mr = this.AddComponent<MeshRenderer>();
+
         Mesh mesh = new Mesh();
 
+        // 가정: 별의 바닥면과 윗면을 이미 구성하는 정점이 정의되었음
         Vector3[] vertices = new Vector3[]
         {
-            new Vector3 (0.0f, 0.0f, 0.0f),
-            new Vector3 (1.0f, 2.0f, 0.0f),
-            new Vector3 (2.0f, 0.0f, 0.0f),            
-        };        
-        mesh.vertices = vertices;
-
-        int[] triangleIndices = new int[]
-        {
-            0,1,2,
+            // 바닥면
+            new Vector3(0.0f, 0.0f, 0.0f), // 0
+            new Vector3(1.0f, 2.0f, 0.0f), // 1
+            new Vector3(2.0f, 0.0f, 0.0f), // 2
+            // 윗면
+            new Vector3(0.0f, 0.0f, 1.0f), // 3
+            new Vector3(1.0f, 2.0f, 1.0f), // 4
+            new Vector3(2.0f, 0.0f, 1.0f), // 5
         };
 
-        mesh.triangles = triangleIndices;
+        mesh.vertices = vertices;
 
-        MeshFilter mf = this.AddComponent<MeshFilter>();
-        MeshRenderer mr = this.AddComponent<MeshRenderer>();
-        
+        int[] triangles = new int[]
+        {
+            // 바닥면
+            0, 2, 1,
+            // 윗면
+            3, 4, 5,
+            // 옆면 1
+            0, 1, 4,
+            0, 4, 3,
+            // 옆면 2
+            1, 2, 5,
+            1, 5, 4,
+            // 옆면 3
+            2, 0, 3,
+            2, 3, 5
+        };
+
+        mesh.triangles = triangles;
+        mesh.RecalculateNormals(); // 메시의 노말을 재계산하여 올바른 라이팅을 보장
+
         mf.mesh = mesh;
-    }  
+    }
 }
