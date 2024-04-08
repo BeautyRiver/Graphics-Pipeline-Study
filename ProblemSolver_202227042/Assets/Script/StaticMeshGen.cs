@@ -13,7 +13,7 @@ public class StaticMeshGenEditor : Editor
 
         StaticMeshGen script = (StaticMeshGen)target;
 
-        if (GUILayout.Button("Generate Mesh"))
+        if (GUILayout.Button("Mesh »ý¼º~"))
         {
             script.GenerateMesh();
         }
@@ -23,6 +23,7 @@ public class StaticMeshGenEditor : Editor
 public class StaticMeshGen : MonoBehaviour
 {
     public Material material;
+    public float height;
     private void Start()
     {
         GenerateMesh();
@@ -37,25 +38,33 @@ public class StaticMeshGen : MonoBehaviour
 
         Mesh mesh = new Mesh();
 
-        // °¡Á¤: º°ÀÇ ¹Ù´Ú¸é°ú À­¸éÀ» ÀÌ¹Ì ±¸¼ºÇÏ´Â Á¤Á¡ÀÌ Á¤ÀÇµÇ¾úÀ½
         Vector3[] vertices = new Vector3[]
         {
-            // ¹Ù´Ú¸é
+            // ¾Õ¸é
             new Vector3(0.0f, 0.0f, 0.0f), // 0
-            new Vector3(1.0f, 2.0f, 0.0f), // 1
+            new Vector3(1.0f, 2.5f, 0.0f), // 1
             new Vector3(2.0f, 0.0f, 0.0f), // 2
-            // À­¸é
-            new Vector3(0.0f, 0.0f, 1.0f), // 3
-            new Vector3(1.0f, 2.0f, 1.0f), // 4
-            new Vector3(2.0f, 0.0f, 1.0f), // 5
+            // µÞ¸é
+            new Vector3(0.0f, 0.0f, height), // 3
+            new Vector3(1.0f, 2.5f, height), // 4
+            new Vector3(2.0f, 0.0f, height), // 5
+            /*-----------------------------------------------------*/
+            // ¾Õ¸é
+            new Vector3(0.0f,1.8f,0.0f), // 6
+            new Vector3(1.0f,-0.7f,0.0f), // 7
+            new Vector3(2.0f,1.8f,0.0f), // 8
+            // µÞ¸é
+            new Vector3(0.0f,1.8f,height), // 9
+            new Vector3(1.0f,-0.7f,height), // 10
+            new Vector3(2.0f,1.8f,height), // 11
         };
 
 
         int[] triangles = new int[]
         {
-            // ¹Ù´Ú¸é
+            // ¾Õ¸é
             0, 2, 1,
-            // À­¸é
+            // µÞ¸é
             3, 4, 5,
             // ¿·¸é 1
             0, 1, 4,
@@ -65,7 +74,24 @@ public class StaticMeshGen : MonoBehaviour
             1, 5, 4,
             // ¿·¸é 3
             2, 0, 3,
-            2, 3, 5
+            2, 3, 5,
+
+            // µÎ¹øÂ°
+
+            // ¾Õ¸é
+            7,6,8,
+            // µÞ¸é
+            9,10,11,
+            // ¿·¸é 1
+            6,7,10,
+            6,10,9,
+            // ¿·¸é 2
+            7,8,11,
+            7,11,10,
+            // ¿·¸é 3
+            8,6,9,
+            8,9,11,
+
         };
 
         mesh.vertices = vertices;
