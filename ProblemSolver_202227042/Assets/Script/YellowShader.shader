@@ -45,13 +45,15 @@ Shader "Unlit/YellowShader"
             {
                 // sample the texture
                 //fixed4 col = float4(1.0f,1.0f,0.0,1.0f);
-                float lightDir = normalize(_LightDirection);
+                float3 lightDir = normalize(_LightDirection.xyz);
                 float lightIntensity = max(dot(i.normal,lightDir),0);
 
                 float4 col = _DiffuseColor * lightIntensity;
 
 
                 return col;
+                //return float4((i.normal * 0.5) + 0.5, 1.0); // 법선 벡터를 0~1 범위로 조정
+
             }
             ENDCG
         }
