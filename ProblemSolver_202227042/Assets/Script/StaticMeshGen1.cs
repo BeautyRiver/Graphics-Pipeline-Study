@@ -5,7 +5,7 @@ using UnityEditor;
 using Unity.VisualScripting;
 
 [CustomEditor(typeof(StaticMeshGen1))]
-public class StaticMeshGenEditor1 : Editor
+public class StaticMeshGenEditor : Editor
 {
     public override void OnInspectorGUI()
     {
