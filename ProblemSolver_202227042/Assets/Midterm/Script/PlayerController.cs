@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     private float rotationTime = 0; // 현재 회전 진행 시간
     private Quaternion targetRotation; // 목표 회전
     private bool isRotating = false; // 회전 중인지 여부
+    private Vector3 dir;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -22,16 +24,30 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        // Get input from the vertical and horizontal axis
-        float moveZ = Input.GetAxisRaw("Vertical"); // Use 'Vertical' for z-axis movement
-        float moveX = Input.GetAxisRaw("Horizontal"); // Use 'Horizontal' for x-axis movement
+        // 스크린 좌표계에서의 이동 입력 받기
+        float moveX = Input.GetAxisRaw("Horizontal");
+        float moveY = Input.GetAxisRaw("Vertical");
 
-        // Calculate the movement direction based on the camera's orientation
-        Vector3 moveDirection = (Camera.main.transform.forward * moveZ + Camera.main.transform.right * moveX).normalized;
-        moveDirection.y = 0f; // Ignore any vertical movement in the camera's direction
+        // 카메라의 방향에 따라 이동 벡터 조정
+        Vector3 moveHorizontal = Camera.main.transform.right * moveX;
+        Vector3 moveVertical = Camera.main.transform.up * moveY;
 
-        // Apply the movement to the player's position
-        transform.position += moveDirection * moveSpeed * Time.deltaTime;
+        // y축 이동 제거 (옵션)
+        moveHorizontal.y = 0;
+        moveVertical.y = 0;
+
+        // 최종 이동 벡터 계산
+        Vector3 movement = (moveHorizontal + moveVertical).normalized * moveSpeed * Time.deltaTime;
+
+        // 플레이어 위치 업데이트
+        transform.position += movement;
+
+        // 플레이어가 이동하는 방향을 바라보게 만들기
+        if (movement != Vector3.zero) // 이동 벡터가 0이 아니면
+        {
+            Quaternion newRotation = Quaternion.LookRotation(movement);
+            transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 10);
+        }
     }
 
 
@@ -39,9 +55,9 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.O) && !isRotating)
         {
-            targetRotation = cameraTransform.rotation * Quaternion.Euler(0, -90, 0);
+            targetRotation = cameraTransform.rotation * Quaternion.Euler(0, -90, 0);            
             rotationTime = 0;
-            isRotating = true;
+            isRotating = true;            
         }
         else if (Input.GetKeyDown(KeyCode.P) && !isRotating)
         {
