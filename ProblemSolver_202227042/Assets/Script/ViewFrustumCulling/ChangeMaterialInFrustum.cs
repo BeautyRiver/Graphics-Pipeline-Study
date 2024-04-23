@@ -28,7 +28,7 @@ public class ChangeMaterialInFrustum : MonoBehaviour
         FrustumPlanes frustum = new FrustumPlanes(thisCamera);
 
         // 모든 씬에 있는 모든 Renderer 컴포넌트를 가져옴
-        Renderer[] renderers = FindObjectsOfType<Renderer>();
+        Renderer[] renderers = GameObject.Find("Enemy").GetComponentsInChildren<Renderer>();
 
         foreach (Renderer renderer in renderers)
         {
@@ -42,11 +42,13 @@ public class ChangeMaterialInFrustum : MonoBehaviour
             {
                 // 프러스텀 내에 있는 경우 Material1 적용
                 renderer.material = material1;
+                renderer.gameObject.GetComponentInParent<EnemyMove_Exam>().speed = 0f;
             }
             else
             {
                 // 프러스텀 밖에 있는 경우 Material2 적용
                 renderer.material = material2;
+                renderer.gameObject.GetComponentInParent<EnemyMove_Exam>().speed = 5f;
             }
         }
     }

@@ -29,6 +29,8 @@ public class RandomObjectGenerator : MonoBehaviour
 
     public void GenerateObjects()
     {
+        GameObject parents = new GameObject();
+        parents.name = "저장소";
         // 이 곳에 Object를 생성하고 배치하는 코드를 작성하세요.
         for (int i = 0; i < ObjectNumber; i++)
         {
@@ -40,7 +42,7 @@ public class RandomObjectGenerator : MonoBehaviour
             );
 
             // TargetObject를 생성하고 랜덤한 위치에 배치합니다.
-            GameObject newObject = Instantiate(TargetObject, randomPosition, Quaternion.identity);
+            GameObject newObject = Instantiate(TargetObject, randomPosition, Quaternion.identity, parents.transform);
         }
 
     }

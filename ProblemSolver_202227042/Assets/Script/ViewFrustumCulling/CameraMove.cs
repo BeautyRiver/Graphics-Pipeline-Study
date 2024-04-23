@@ -13,22 +13,11 @@ public class CameraMove : MonoBehaviour
     {
         x = Input.GetAxis("Horizontal");
         z = Input.GetAxis("Vertical");
-        if (Input.GetKey(KeyCode.Space))
-        {
-            y = 1;
-        }       
-        else if (Input.GetKey(KeyCode.LeftControl))
-        {
-            y = -1;
-        }
-        else
-        {
-            y = 0;
-        }
+      
     }
 
     private void FixedUpdate()
     {
-        transform.Translate(new Vector3(x,y,z) * speed * Time.deltaTime);
+        transform.Translate(new Vector3(x,z,0) * speed * Time.deltaTime);
     }
 }
