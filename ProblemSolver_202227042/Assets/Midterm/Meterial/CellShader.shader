@@ -1,91 +1,140 @@
-Shader "Unlit/YellowShader"
+Shader "Unlit/CelShader"
 {
     Properties
     {
-        // 사용자가 조절 가능한 쉐이더 속성들
-        _DiffuseColor("DiffuseColor", Color) = (1,1,0,1) // 분산광 색상
-        _LightDirection("LightDirection", Vector) = (1,1,1,0) // 빛의 방향
-        _SpecularColor("SpecularColor", Color) = (1,1,1,1) // 반사광 색상
-        _Shininess("Shininess", Range(0.1, 100)) = 10    // 반사광의 광택 강도
-        _AmbientColor("AmbientColor", Color) = (1,1,1,1) // 주변광 색상
-        _Brightness("Brightness", Float) = 1.0
-
+        _MainTex("Main Texture", 2D) = "white" {}
+        _Color("Main Tex Color", Color) = (1,1,1,1)
+        _BumpMap("NormalMap", 2D) = "bump" {}
+ 
+        _Outline_Bold("Outline Bold", Range(0, 1)) = 0.1
+ 
+        _Band_Tex("Band LUT", 2D) = "white" {}
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" } // 렌더링 유형 설정
-
+        Tags { "RenderType"="Opaque" }
+ 
+        cull front    //! 1Pass는 앞면을 그리지 않는다.
         Pass
         {
             CGPROGRAM
-            // 선언: 정점 및 프래그먼트 쉐이더 함수
-            #pragma vertex vert
-            #pragma fragment frag
-
-            #include "UnityCG.cginc" // Unity의 공통 그래픽 인클루드 파일
-
-            // 입력 구조체: 메시의 정점 데이터
-            struct appdata
-            {
-                float4 vertex : POSITION; // 정점 위치
-                float3 normal : NORMAL; // 정점 법선
-            };
-
-            // 출력 구조체: 정점 쉐이더에서 프래그먼트 쉐이더로 데이터 전달
-            struct v2f
-            {
-                float4 vertex : SV_POSITION; // 스크린 공간에서의 위치
-                float3 normal : NORMAL; // 변환된 정점 법선
-                float3 viewDir : TEXCOORD0; // 카메라에서 정점까지의 방향
-            };
-
-            // 쉐이더 속성
-            float4 _DiffuseColor;
-            float4 _LightDirection;
-            float4 _SpecularColor;
-            float _Shininess;
-            float4 _AmbientColor;
-            float _Brightness;
-
-            // 정점 쉐이더: 메시의 각 정점 처리
-            v2f vert (appdata v)
-            {
-                v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex); // 오브젝트 공간에서 클립 공간으로 변환
-                o.normal = v.normal; // 정점 법선
-                o.viewDir = normalize(_WorldSpaceCameraPos - v.vertex.xyz); // 카메라 방향 계산
-                return o;
-            }
-
-            // 프래그먼트 쉐이더: 픽셀별 색상 계산
-            fixed4 frag (v2f i) : SV_Target
-            {
-                // 주변광 계산
-                float4 ambient = _AmbientColor * 0.4f; // 주변광 강도 적용
-
-                // 빛의 방향과 정규화
-                float4 lightDir = normalize(_LightDirection);
-                // 법선과 빛의 방향으로부터 분산광 계산
-                float lightIntensity = max(dot(i.normal, lightDir), 0);
-                float4 diffuse = _DiffuseColor * lightIntensity;
-
-                // 뷰 방향과 반사광 계산
-                float3 viewDir = normalize(i.viewDir);
-                float3 halfwayDir = normalize(lightDir + viewDir);
-                float specularIntensity = pow(max(dot(i.normal, halfwayDir), 0.0), _Shininess);
-                float4 specular = _SpecularColor.rgba * specularIntensity;
-
-                // 최종 색상 계산
-                float4 color = diffuse + specular + ambient;
-
-                // 색상 밴딩 효과
-                float threshold = 0.1; // 임계값 설정
-                float4 banding = floor(color / threshold); // 색상을 임계값으로 나누어 단계화
-                float4 col = banding * threshold; // 밴딩 적용
-                col *= _Brightness;
-                return col; // 최종 색상 반환
-            }
+            #pragma vertex _VertexFuc
+            #pragma fragment _FragmentFuc
+            #include "UnityCG.cginc"
+ 
+                struct ST_VertexInput    //! 버텍스 쉐이더 Input
+                {
+                    float4 vertex : POSITION;
+                    float3 normal : NORMAL;
+                };
+ 
+                struct ST_VertexOutput    //! 버텍스 쉐이더 Output
+                {
+                    float4 vertex : SV_POSITION;
+                };
+ 
+                float _Outline_Bold;
+ 
+                ST_VertexOutput _VertexFuc(ST_VertexInput stInput)
+                {
+                    ST_VertexOutput stOutput;
+ 
+                    float3 fNormalized_Normal = normalize(stInput.normal);        //! 로컬 노말 벡터를 정규화 시킴
+                    float3 fOutline_Position = stInput.vertex + fNormalized_Normal * (_Outline_Bold * 0.1f); //! 버텍스 좌표에 노말 방향으로 더한다.
+ 
+                    stOutput.vertex = UnityObjectToClipPos(fOutline_Position);    //! 노말 방향으로 더해진 버텍스 좌표를 카메라 클립 공간으로 변환 
+                    return stOutput;
+                }
+ 
+ 
+                float4 _FragmentFuc(ST_VertexOutput i) : SV_Target
+                {
+                    return 0.0f;
+                }
+ 
             ENDCG
         }
+ 
+        cull back    //! 2Pass는 뒷면을 그리지 않는다.
+        CGPROGRAM
+ 
+        #pragma surface surf _BandedLighting    //! 커스텀 라이트 사용
+ 
+        struct Input
+        {
+            float2 uv_MainTex;
+            float2 uv_Band_Tex;
+            float2 uv_BumpMap;
+        };
+ 
+        struct SurfaceOutputCustom        //! Custom SurfaceOutput 구조체, BandLUT 텍스처를 넣기 위해 만듬
+        {
+            fixed3 Albedo;
+            fixed3 Normal;
+            fixed3 Emission;
+            half Specular;
+            fixed Gloss;
+            fixed Alpha;
+ 
+            float3 BandLUT;
+        };
+ 
+        sampler2D _MainTex;
+        sampler2D _Band_Tex;
+        sampler2D _BumpMap;
+ 
+        float4 _Color;
+ 
+        void surf(Input IN, inout SurfaceOutputCustom o)
+        {
+            float4 fMainTex = tex2D(_MainTex, IN.uv_MainTex);
+            o.Albedo = fMainTex.rgb;
+            o.Alpha = 1.0f;
+ 
+            float4 fBandLUT = tex2D(_Band_Tex, IN.uv_Band_Tex);    
+            o.BandLUT = fBandLUT.rgb;
+ 
+            float3 fNormalTex = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap));
+            o.Normal = fNormalTex;
+        }
+         
+        //! 커스텀 라이트 함수
+        float4 Lighting_BandedLighting(SurfaceOutputCustom s, float3 lightDir, float3 viewDir, float atten)
+        {
+            //! BandedDiffuse 조명 처리 연산
+            float3 fBandedDiffuse;
+            float fNDotL = dot(s.Normal, lightDir) * 0.5f + 0.5f;    //! Half Lambert 공식
+ 
+            //! 0~1로 이루어진 fNDotL값을 3개의 값으로 고정함 <- Banded Lighting 작업
+            //float fBandNum = 3.0f;
+            //fBandedDiffuse = ceil(fNDotL * fBandNum) / fBandNum;             
+ 
+            //! BandLUT 텍스처의 UV 좌표에 0~1로 이루어진 NDotL값을 넣어서 음영 색을 가져온다.
+            fBandedDiffuse = tex2D(_Band_Tex, float2(fNDotL, 0.5f)).rgb;
+ 
+ 
+ 
+            float3 fSpecularColor;
+            float3 fHalfVector = normalize(lightDir + viewDir);
+            float fHDotN = saturate(dot(fHalfVector, s.Normal));
+            float fPowedHDotN = pow(fHDotN, 500.0f);
+ 
+            //! smoothstep
+            float fSpecularSmooth = smoothstep(0.005, 0.01f, fPowedHDotN);
+            fSpecularColor = fSpecularSmooth * 1.0f;
+ 
+ 
+ 
+            //! 최종 컬러 출력
+            float4 fFinalColor;
+            fFinalColor.rgb = ((s.Albedo * _Color) + fSpecularColor) *
+                                 fBandedDiffuse * _LightColor0.rgb * atten;
+            fFinalColor.a = s.Alpha;
+ 
+            return fFinalColor;
+        }
+ 
+        ENDCG
     }
 }
+ 
