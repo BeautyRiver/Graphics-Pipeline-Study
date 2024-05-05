@@ -67,7 +67,7 @@ Material:
     m_Ints: []
     m_Floats:
     - Brightness: 1
-    - _Brightness: 1.01
+    - _Brightness: 2.28
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DivideLevel: 3.62
@@ -81,18 +81,18 @@ Material:
     - _Outline: 0.05
     - _Outline_Bold: 0.1
     - _Parallax: 0.02
-    - _Shininess: 19
+    - _Shininess: 66.8
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _AmbientColor: {r: 0.15866967, g: 0.4245283, b: 0, a: 1}
-    - _Color: {r: 0.22186518, g: 0.14245868, b: 0.30817598, a: 1}
-    - _DiffuseColor: {r: 0, g: 1, b: 0.8527441, a: 1}
+    - _AmbientColor: {r: 0.13811415, g: 0.053340405, b: 0.19496846, a: 1}
+    - _Color: {r: 0.4545851, g: 0, b: 0.9308176, a: 1}
+    - _DiffuseColor: {r: 0.56836104, g: 0.2231714, b: 0.7798742, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LightDirection: {r: 0.5, g: 2.17, b: 0.43, a: 0}
+    - _LightDirection: {r: -2.62, g: 6.07, b: 1, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SpecularColor: {r: 1, g: 0.17254902, b: 0, a: 1}
+    - _SpecularColor: {r: 0.923254, g: 0.7012578, b: 1, a: 1}
   m_BuildTextureStacks: []
