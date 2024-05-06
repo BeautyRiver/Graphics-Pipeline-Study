@@ -290,7 +290,7 @@ PrefabInstance:
       objectReference: {fileID: 1889009178}
     - target: {fileID: 3021493724134632090, guid: 367e1b8220c9db54297370c48eb8377c, type: 3}
       propertyPath: moveSpeed
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3021493724134632090, guid: 367e1b8220c9db54297370c48eb8377c, type: 3}
       propertyPath: playerRenderer
@@ -980,7 +980,7 @@ PrefabInstance:
       objectReference: {fileID: 1889009178}
     - target: {fileID: 3021493724134632090, guid: 367e1b8220c9db54297370c48eb8377c, type: 3}
       propertyPath: moveSpeed
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3021493724134632090, guid: 367e1b8220c9db54297370c48eb8377c, type: 3}
       propertyPath: playerRenderer
@@ -1590,7 +1590,7 @@ PrefabInstance:
       objectReference: {fileID: 1889009178}
     - target: {fileID: 3021493724134632090, guid: 367e1b8220c9db54297370c48eb8377c, type: 3}
       propertyPath: moveSpeed
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3021493724134632090, guid: 367e1b8220c9db54297370c48eb8377c, type: 3}
       propertyPath: playerRenderer
@@ -1876,7 +1876,7 @@ PrefabInstance:
       objectReference: {fileID: 1889009178}
     - target: {fileID: 3021493724134632090, guid: 367e1b8220c9db54297370c48eb8377c, type: 3}
       propertyPath: moveSpeed
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3021493724134632090, guid: 367e1b8220c9db54297370c48eb8377c, type: 3}
       propertyPath: playerRenderer
