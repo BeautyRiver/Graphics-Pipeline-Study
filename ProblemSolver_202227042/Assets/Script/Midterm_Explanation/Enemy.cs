@@ -13,6 +13,8 @@ public class Enemy : MonoBehaviour
     public  bool isLookAround = false; // 주변을 둘러보는 중인지 여부
 
     [Header("이동 제한 & 범위")]
+    public LayerMask wallLayer;
+    public bool isWallCheck;
     public Transform moveRange;
     public float moveSpeed;
     public Vector3 moveDir;
@@ -37,7 +39,7 @@ public class Enemy : MonoBehaviour
         if (isChase == false && isReturnPos == false && isLookAround == false) // 추격 중이 아닐 때
             CheckDirection();       
 
-        FindPlayer();
+        // FindPlayer();
 
     }
 
@@ -130,7 +132,7 @@ public class Enemy : MonoBehaviour
             transform.rotation = Quaternion.Lerp(leftRotation, rightRotation, t);
             yield return null;
         }
-        isReturnPos = true;
+        //isReturnPos = true;
         isLookAround = false;
     }
 
@@ -156,7 +158,11 @@ public class Enemy : MonoBehaviour
     void CheckDirection() 
     {
         Vector3 detectPos = transform.position + moveDir * dectRange;
-        if (detectPos.x < minBounds.x || detectPos.x > maxBounds.x || detectPos.z < minBounds.z || detectPos.z > maxBounds.z)
+        isWallCheck = Physics.Raycast(transform.position, moveDir, dectRange, wallLayer);
+        Debug.DrawRay(transform.position, moveDir * dectRange, Color.red);
+
+        if ((detectPos.x < minBounds.x || detectPos.x > maxBounds.x || detectPos.z < minBounds.z || detectPos.z > maxBounds.z)
+            || isWallCheck)
         {
             moveDir = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
         }
@@ -167,5 +173,7 @@ public class Enemy : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(moveRange.position, moveRange.localScale);
+        // 이동 제한 범위 레이로 표시
+        //Gizmos.DrawLine(transform.position, transform.position + moveDir * dectRange);
     }
 }

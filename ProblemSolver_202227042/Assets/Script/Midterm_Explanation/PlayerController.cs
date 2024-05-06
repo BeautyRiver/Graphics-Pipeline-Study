@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,7 +12,8 @@ public class PlayerController : MonoBehaviour
     private Quaternion targetRotation; // 목표 회전
     private bool isRotating = false; // 회전 중인지 여부
     private Vector3 dir;
-
+    public GameObject clearScreen;
+    public Text gamemsg;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -78,6 +80,22 @@ public class PlayerController : MonoBehaviour
                 cameraTransform.rotation = targetRotation;
                 isRotating = false;
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "End")
+        {
+            gamemsg.text = "클리어!";
+            Time.timeScale = 0;
+            clearScreen.SetActive(true);
+        }
+        if (other.gameObject.tag == "Enemy")
+        {
+            gamemsg.text = "게임오버!";
+            Time.timeScale = 0;
+            clearScreen.SetActive(true);
         }
     }
 }

@@ -20,7 +20,7 @@ public class MapGenerator : MonoBehaviour
     // GenerateMap 함수는 CSV 파일에서 맵 데이터를 읽고 맵을 생성합니다.
     void GenerateMap()
     {
-        string[] lines = File.ReadAllLines("Assets/Maps/map.csv"); // 맵 데이터가 포함된 CSV 파일을 읽습니다.
+        string[] lines = File.ReadAllLines("Assets/map.csv"); // 맵 데이터가 포함된 CSV 파일을 읽습니다.
         for (int y = 0; y < height; y++)
         {
             string[] tiles = lines[y].Split(','); // 각 줄을 쉼표로 분리하여 타일 데이터를 얻습니다.
@@ -36,21 +36,26 @@ public class MapGenerator : MonoBehaviour
     // PlaceTile 함수는 주어진 타일 타입에 따라 적절한 오브젝트를 생성하고 맵에 배치합니다.
     void PlaceTile(int tile, int x, int y)
     {
-        GameObject toPlace = null; // 배치할 GameObject를 null로 초기화합니다.
+        GameObject toPlace = null;
         switch (tile)
         {
             case 1:
-                toPlace = lowWall; // 타일 타입이 1이면 낮은 벽을 선택합니다.
+                toPlace = lowWall; // 낮은 벽 오브젝트 선택
                 break;
             case 2:
-                toPlace = highWall; // 타일 타입이 2이면 높은 벽을 선택합니다.
+                toPlace = highWall; // 높은 벽 오브젝트 선택
                 break;
         }
 
         if (toPlace != null)
         {
-            // Instantiate 함수를 사용하여 오브젝트를 실제로 생성하고, 위치와 회전을 설정합니다.
-            Instantiate(toPlace, new Vector3(x * planeSize, 0, y * planeSize), Quaternion.identity, transform);
+            // 전체 맵 너비의 절반에서 한 타일의 절반 크기를 빼서 중앙 정렬을 위한 x, y 오프셋 계산
+            float offsetX = planeSize * width / 2 - planeSize / 2;
+            float offsetY = planeSize * height / 2 - planeSize / 2;
+
+            // Instantiate를 사용하여 오브젝트를 생성하고, 위치를 조정하여 Plane의 중앙에 맞춤
+            Instantiate(toPlace, new Vector3(x * planeSize - offsetX, 0, y * planeSize - offsetY), Quaternion.identity, transform);
         }
     }
+
 }
